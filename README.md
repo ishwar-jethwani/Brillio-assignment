@@ -27,6 +27,20 @@ It regenerates three artifacts in [`output/`](output/):
 | `results.json` | Full structured dataset — one enriched record per call + all rollups. The machine-readable source of truth. |
 | `insights.md` | Written findings & recommendations (the reasoning, pitched at leadership). |
 | `report.html` | Self-contained interactive dashboard (open in any browser, works offline). |
+| `Transcript_Intelligence.pptx` | The **slide deck** deliverable — a 17-slide leadership walkthrough of every part of the brief (background, the 3 tasks, deliverables) + the findings. |
+
+The slide deck is generated separately (it reads `results.json`, so run the
+pipeline first):
+
+```bash
+cd transcript_intelligence
+python make_ppt.py        # -> ../output/Transcript_Intelligence.pptx
+```
+
+`make_ppt.py` writes a real `.pptx` with **zero dependencies** — a PowerPoint
+file is just a ZIP of OpenXML parts, so it's built with the stdlib `zipfile`
+module (no `python-pptx` needed). Numbers on the slides are pulled live from
+`results.json`, so the deck never drifts from the pipeline.
 
 ## Repository layout
 
@@ -38,6 +52,7 @@ interview-assignment/
 │   ├── pipeline.py                # load → classify → categorise → score → roll up
 │   ├── render_insights.py         # writes output/insights.md
 │   ├── render_report.py           # writes output/report.html (inline SVG charts)
+│   ├── make_ppt.py                # writes output/Transcript_Intelligence.pptx
 │   └── test_pipeline.py           # unittest suite (20 tests, stdlib only)
 └── README.md
 ```
